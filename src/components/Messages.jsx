@@ -1,50 +1,59 @@
+import { doc, onSnapshot } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import { useContext, useEffect, useRef, useState } from "react";
+import { MessageContext } from "../context/MessageContext";
+import { v4 as uuid } from "uuid";
+
 export function Messages({}) {
+  const { chat, setChat } = useContext(MessageContext);
+  const [messages, setMessages] = useState([]);
+  const dummy = useRef();
+
+  useEffect(() => {
+    console.log(chat.conversationId);
+    console.log(chat);
+
+    // Check if the conversation ID exists or set it to a dummy value
+    if (!chat.conversationId) chat.conversationId = "dummy";
+
+    const conversationRef = doc(db, "conversations", chat.conversationId);
+
+    // Subscribe to conversation changes
+    const unSub = onSnapshot(conversationRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setMessages(docSnap.data().messages);
+
+        // Scroll to the bottom of the messages
+        dummy.current.scrollIntoView({ behavior: "smooth" });
+      } else {
+        setMessages([]);
+      }
+    });
+
+    // Unsubscribe from conversation changes when the component unmounts
+    return () => unSub();
+  }, [chat]);
+
   return (
     <div className="messages">
       <ul>
-        <li className="sent">
-          <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-          <p>
-            How the hell am I supposed to get a jury to believe you when I am
-            not even sure that I do?!
-          </p>
-        </li>
-        <li className="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>
-            When you're backed against the wall, break the god damn thing down.
-          </p>
-        </li>
-        <li className="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>Excuses don't win championships.</p>
-        </li>
-        <li className="sent">
-          <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-          <p>Oh yeah, did Michael Jordan tell you that?</p>
-        </li>
-        <li className="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>No, I told him that.</p>
-        </li>
-        <li className="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>What are your choices when someone puts a gun to your head?</p>
-        </li>
-        <li className="sent">
-          <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-          <p>
-            What are you talking about? You do what they say or they shoot you.
-          </p>
-        </li>
-        <li className="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>
-            Wrong. You take the gun, or you pull out a bigger one. Or, you call
-            their bluff. Or, you do any one of a hundred and htmlForty six other
-            things.
-          </p>
-        </li>
+        {messages.map((message) => (
+          <li
+            key={uuid()} // Generate a unique key for each message
+            className={message.id === auth.currentUser.id ? "replies" : "sent"} // Use strict equality
+          >
+            <img src={message.photoURL} alt="" />
+            <div>
+              <div className="user-messages">
+                <h6>{message.name}</h6>
+              </div>
+              <div>
+                <p>{message.text}</p>
+              </div>
+            </div>
+          </li>
+        ))}
+        <div ref={dummy}></div>
       </ul>
     </div>
   );

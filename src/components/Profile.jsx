@@ -1,31 +1,33 @@
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+
 export function Profile({}) {
+  const navigate = useNavigate();
+  const { displayName, photoURL } = auth.currentUser;
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("Logout successful");
+        navigate("/login");
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
+  };
+
   return (
     <div id="profile">
       <div className="wrap">
+        <img id="profile-img" src={photoURL} className="online" alt="" />
+        <p>{displayName}</p>
         <img
-          id="profile-img"
-          src="http://emilcarlsson.se/assets/mikeross.png"
-          className="online"
-          alt=""
+          className="logout-icon"
+          src="src/assets/signout.png"
+          onClick={logout}
         />
-        <p>Mike Ross</p>
-        <i className="fa fa-chevron-down expand-button" aria-hidden="true"></i>
-        <div id="status-options">
-          <ul>
-            <li id="status-online" className="active">
-              <span className="status-circle"></span> <p>Online</p>
-            </li>
-            <li id="status-away">
-              <span className="status-circle"></span> <p>Away</p>
-            </li>
-            <li id="status-busy">
-              <span className="status-circle"></span> <p>Busy</p>
-            </li>
-            <li id="status-offline">
-              <span className="status-circle"></span> <p>Offline</p>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   );
