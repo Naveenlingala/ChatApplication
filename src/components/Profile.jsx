@@ -25,7 +25,7 @@ export function Profile({}) {
         <p>{displayName}</p>
         <img
           className="logout-icon"
-          src="src/assets/signout.png"
+          src="/signout.png"
           onClick={logout}
         />
       </div>

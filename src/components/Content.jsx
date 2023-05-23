@@ -12,7 +12,7 @@ export function Content({}) {
       {/* Render the chat header */}
       <ChatHeader />
 
-      {console.log(chat)}
+      {/* {console.log(chat)} */}
       {/* Render the messages */}
       {<Messages />}
 

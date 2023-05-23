@@ -54,7 +54,7 @@ export function Contact({ isGroup, contactId, isSearch, setName }) {
           (userData[auth.currentUser.id]
             ? userData[auth.currentUser.id].photoURL
             : "") ||
-          "src/assets/group.png";
+          "/group.png";
         var id = doc.id || "";
         var conversationId = userData.conversationId || "";
 
@@ -144,7 +144,7 @@ export function Contact({ isGroup, contactId, isSearch, setName }) {
   return (
     <li className="contact" onClick={viewChat}>
       <div className="wrap">
-        <img src={isGroup ? "src/assets/group.png" : result.photoURL} alt="" />
+        <img src={isGroup ? "/group.png" : result.photoURL} alt="" />
         <div className="meta">
           <p className="name">{result.name}</p>
           <p className="preview">{result.lastMessage}</p>

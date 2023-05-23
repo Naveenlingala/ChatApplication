@@ -17,7 +17,7 @@ export function ChatHeader() {
   const removeReceiver = async () => {
     const user1 = auth.currentUser.id;
 
-    if (chat.photoURL === "src/assets/group.png") {
+    if (chat.photoURL === "/group.png") {
       // Removing a user from a group chat
       const groupRef = doc(db, "group-chat", chat.receiverId);
       console.log("Leave group");

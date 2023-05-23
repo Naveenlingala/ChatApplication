@@ -51,7 +51,7 @@ function Login() {
 
   return (
     <>
-      <img src="src/assets/icon.png" className="login-icon" />
+      <img src="/icon.png" className="login-icon" />
       <button
         type="button"
         className="login-with-google-btn"

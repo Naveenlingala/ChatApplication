@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "site": "chatapplication-1212",
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "asia-east1"
+    }
+  }
+}
